@@ -2,8 +2,10 @@ import random
 from pathlib import Path
 from typing import Any, Dict, List
 
+import cv2
 import lightning as L
 from chameleon import build_optimizer
+from torch.nn import Identity
 
 __all__ = [
     'BaseMixin', 'BorderValueMixin', 'FillValueMixin',
@@ -183,7 +185,9 @@ class BaseMixin(L.LightningModule):
 
         self.cfg = cfg
         self.preview_batch = cfg['common']['preview_batch']
-        # self.max_text_length = cfg['common']['max_text_length']  # 如果需要，可再自行解開
+        self.backbone = Identity()
+        self.neck = Identity()
+        self.head = Identity()
 
         # 進行優化器與學習率 Scheduler 相關的配置
         self.apply_solver_config(cfg['optimizer'], cfg['lr_scheduler'])
@@ -264,9 +268,10 @@ class BaseMixin(L.LightningModule):
         """
         使用 self.apply_solver_config(...) 後的配置，建立優化器與學習率調度器。
         """
+
         optimizer = build_optimizer(
             name=self.optimizer_name,
-            model_params=self.get_optimizer_params(),
+            params=self.get_optimizer_params(),
             **self.optimizer_opts
         )
         scheduler = build_optimizer(
@@ -294,7 +299,8 @@ class BaseMixin(L.LightningModule):
         """
         根據 current_epoch 進行區分，產生對應的預覽目錄。
         """
-        img_path = Path('.') / "preview" / f'epoch_{self.current_epoch}'
+        img_path = Path(self.cfg.root_dir) / "preview" / \
+            f'epoch_{self.current_epoch}'
         if not img_path.exists():
             img_path.mkdir(parents=True)
         return img_path

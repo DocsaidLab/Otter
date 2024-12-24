@@ -19,17 +19,25 @@ RUN apt-get update -y && \
 
 RUN python -m pip install --no-cache-dir -U pip setuptools wheel
 
-RUN git clone --depth 1 https://github.com/DocsaidLab/Capybara.git && \
-    cd Capybara && \
+COPY ./Capybara  /usr/local/Capybara
+RUN cd /usr/local/Capybara && \
+    rm -rf Capybara.egg-info dist build && \
     python setup.py bdist_wheel && \
     python -m pip install dist/*.whl && \
-    cd .. && rm -rf Capybara
+    cd ~ && rm -rf /usr/local/Capybara
 
-RUN git clone --depth 1 https://github.com/DocsaidLab/Chameleon.git && \
-    cd Chameleon && \
+COPY ./Chameleon  /usr/local/Chameleon
+RUN cd /usr/local/Chameleon && \
+    rm -rf Chameleon.egg-info dist build && \
     python setup.py bdist_wheel && \
     python -m pip install dist/*.whl && \
-    cd .. && rm -rf Chameleon
+    cd ~ && rm -rf /usr/local/Chameleon
+
+COPY . /usr/local/otter
+RUN cd /usr/local/otter && \
+    python setup.py bdist_wheel && \
+    python -m pip install dist/*.whl && \
+    cd ~ && rm -rf /usr/local/otter
 
 RUN python -m pip install --no-cache-dir -U \
     tqdm colored ipython tabulate tensorboard scikit-learn fire \
