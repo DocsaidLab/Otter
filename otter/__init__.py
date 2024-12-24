@@ -5,4 +5,4 @@ from .mixin import *
 from .model_profile import *
 from .text_converter import *
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
