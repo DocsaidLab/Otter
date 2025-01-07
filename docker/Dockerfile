@@ -27,7 +27,7 @@ RUN cd /usr/local/otter && \
 
 RUN python -m pip install --no-cache-dir -U \
     tqdm colored ipython tabulate tensorboard scikit-learn fire \
-    albumentations "Pillow>=10.0.0" fitsne opencv-fixer
+    albumentations "Pillow>=10.0.0" fitsne opencv-fixer prettytable
 
 RUN python -c "from opencv_fixer import AutoFix; AutoFix()"
 RUN python -c "import capybara; import chameleon"
