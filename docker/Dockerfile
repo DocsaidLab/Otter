@@ -19,20 +19,6 @@ RUN apt-get update -y && \
 
 RUN python -m pip install --no-cache-dir -U pip setuptools wheel
 
-COPY ./Capybara  /usr/local/Capybara
-RUN cd /usr/local/Capybara && \
-    rm -rf Capybara.egg-info dist build && \
-    python setup.py bdist_wheel && \
-    python -m pip install dist/*.whl && \
-    cd ~ && rm -rf /usr/local/Capybara
-
-COPY ./Chameleon  /usr/local/Chameleon
-RUN cd /usr/local/Chameleon && \
-    rm -rf Chameleon.egg-info dist build && \
-    python setup.py bdist_wheel && \
-    python -m pip install dist/*.whl && \
-    cd ~ && rm -rf /usr/local/Chameleon
-
 COPY . /usr/local/otter
 RUN cd /usr/local/otter && \
     python setup.py bdist_wheel && \
@@ -44,7 +30,7 @@ RUN python -m pip install --no-cache-dir -U \
     albumentations "Pillow>=10.0.0" fitsne opencv-fixer
 
 RUN python -c "from opencv_fixer import AutoFix; AutoFix()"
-RUN python -c "import capybara"
+RUN python -c "import capybara; import chameleon"
 
 WORKDIR /code
 
