@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-FROM nvcr.io/nvidia/pytorch:24.12-py3
+FROM nvcr.io/nvidia/pytorch:25.03-py3
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONWARNINGS="ignore" \
